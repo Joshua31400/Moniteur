@@ -21,7 +21,6 @@ public class CommandManager {
 
         if (!message.startsWith(BotConfig.PREFIX)) return;
 
-        // Découpage du message pour séparer la commande des arguments
         String[] split = message.replaceFirst(BotConfig.PREFIX, "").split("\\s+");
         String commandName = split[0].toLowerCase();
 
@@ -35,5 +34,9 @@ public class CommandManager {
             // Gestion des commandes inconnues
             event.getChannel().sendMessage("⚠️ Commande inconnue. Tapez `!help` pour voir la liste.").queue();
         }
+    }
+
+    public java.util.Collection<ICommand> getRegisteredCommands() {
+        return commands.values();
     }
 }
