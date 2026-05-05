@@ -4,8 +4,10 @@ import fr.ynov.toulouse.discordbot.BotConfig;
 import fr.ynov.toulouse.discordbot.util.EmbedHelper;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
 import java.awt.Color;
 
+/** Affiche la liste de toutes les commandes disponibles. */
 public class HelpCommand implements ICommand {
 
     private final CommandManager manager;
@@ -27,8 +29,6 @@ public class HelpCommand implements ICommand {
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
         StringBuilder description = new StringBuilder();
-
-        // On récupère toutes les commandes enregistrées dynamiquement
         for (ICommand cmd : manager.getRegisteredCommands()) {
             description.append("**").append(BotConfig.PREFIX).append(cmd.getName()).append("** : ")
                     .append(cmd.getDescription()).append("\n");

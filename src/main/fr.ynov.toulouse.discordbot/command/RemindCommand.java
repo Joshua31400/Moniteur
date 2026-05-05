@@ -1,15 +1,15 @@
 package fr.ynov.toulouse.discordbot.command;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-// Commande pour l'historique des messages
+/** Planifie l'envoi d'un message de rappel après un délai en secondes. */
 public class RemindCommand implements ICommand {
 
-    // Le moteur qui va gérer nos tâches planifiées
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Override
@@ -19,7 +19,7 @@ public class RemindCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Bot envoie un message après X secondes. Usage: !remind <temps> <message>";
+        return "Envoie un rappel après X secondes. Usage : !remind <secondes> <message>";
     }
 
     @Override
@@ -31,19 +31,19 @@ public class RemindCommand implements ICommand {
 
         try {
             int seconds = Integer.parseInt(args[0]);
+            String reminder = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-            // On récupère le reste des arguments pour reformer le message
-            String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+            event.getChannel().sendMessage("⏱️ Rappel programmé dans " + seconds + " seconde(s).").queue();
 
-            event.getChannel().sendMessage("⏱️ C'est noté ! Rappel programmé dans " + seconds + " secondes.").queue();
-
-            // On planifie l'envoi du message de rappel
-            scheduler.schedule(() -> {
-                event.getChannel().sendMessage("🔔 <@" + event.getAuthor().getId() + "> Rappel : " + message).queue();
-            }, seconds, TimeUnit.SECONDS);
+            scheduler.schedule(() ->
+                            event.getChannel().sendMessage(
+                                    "🔔 <@" + event.getAuthor().getId() + "> Rappel : " + reminder
+                            ).queue(),
+                    seconds, TimeUnit.SECONDS
+            );
 
         } catch (NumberFormatException e) {
-            event.getChannel().sendMessage("⚠️ Le temps doit être un nombre entier de secondes.").queue();
+            event.getChannel().sendMessage("⚠️ Le délai doit être un nombre entier de secondes.").queue();
         }
     }
 }

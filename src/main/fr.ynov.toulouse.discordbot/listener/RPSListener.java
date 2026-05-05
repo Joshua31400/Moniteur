@@ -2,16 +2,23 @@ package fr.ynov.toulouse.discordbot.listener;
 
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Écoute les réactions sur les messages de parties Pierre-Feuille-Ciseaux
+ * et détermine le résultat une fois que les deux joueurs ont voté.
+ */
 public class RPSListener extends ListenerAdapter {
 
+    /** Sessions de jeu actives, indexées par l'ID du message Discord. */
     public static final Map<String, GameSession> activeGames = new HashMap<>();
 
+    /** Représente une partie en cours entre deux joueurs. */
     public static class GameSession {
-        public String p1Id;
-        public String p2Id;
+        public final String p1Id;
+        public final String p2Id;
         public String p1Choice = null;
         public String p2Choice = null;
 
@@ -41,10 +48,12 @@ public class RPSListener extends ListenerAdapter {
             activeGames.remove(event.getMessageId());
             String result = determineWinner(game.p1Choice, game.p2Choice, game.p1Id, game.p2Id);
 
-            event.getChannel().sendMessage("🏁 **Résultat du duel !**\n" +
-                    "<@" + game.p1Id + "> a joué " + game.p1Choice + "\n" +
-                    "<@" + game.p2Id + "> a joué " + game.p2Choice + "\n\n" +
-                    "🏆 " + result).queue();
+            event.getChannel().sendMessage(
+                    "🏁 **Résultat du duel !**\n" +
+                            "<@" + game.p1Id + "> a joué " + game.p1Choice + "\n" +
+                            "<@" + game.p2Id + "> a joué " + game.p2Choice + "\n\n" +
+                            "🏆 " + result
+            ).queue();
         }
     }
 

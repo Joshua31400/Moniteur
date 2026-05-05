@@ -2,9 +2,10 @@ package fr.ynov.toulouse.discordbot.command;
 
 import fr.ynov.toulouse.discordbot.listener.RPSListener;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+/** Lance une partie de Pierre-Feuille-Ciseaux entre deux membres du serveur. */
 public class RPSCommand implements ICommand {
 
     @Override
@@ -14,12 +15,11 @@ public class RPSCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Pierre-feuille-ciseaux contre un membre. Usage: !rps @user";
+        return "Lance un duel Pierre-Feuille-Ciseaux. Usage : !rps @membre";
     }
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
-        // On s'assure qu'un adversaire a bien été mentionné[cite: 1]
         if (event.getMessage().getMentions().getUsers().isEmpty()) {
             event.getChannel().sendMessage("⚠️ Il faut mentionner un adversaire ! Exemple : `!rps @Membre`").queue();
             return;
@@ -31,16 +31,19 @@ public class RPSCommand implements ICommand {
             return;
         }
 
-        event.getChannel().sendMessage("🎮 **Pierre-Feuille-Ciseaux**\n" +
+        event.getChannel().sendMessage(
+                "🎮 **Pierre-Feuille-Ciseaux**\n" +
                         "<@" + event.getAuthor().getId() + "> VS <@" + opponent.getId() + ">\n" +
-                        "Cliquez sur une réaction pour jouer !")
-                .queue(message -> {
-                    message.addReaction(Emoji.fromUnicode("🪨")).queue();
-                    message.addReaction(Emoji.fromUnicode("📄")).queue();
-                    message.addReaction(Emoji.fromUnicode("✂️")).queue();
+                        "Cliquez sur une réaction pour jouer !"
+        ).queue(message -> {
+            message.addReaction(Emoji.fromUnicode("🪨")).queue();
+            message.addReaction(Emoji.fromUnicode("📄")).queue();
+            message.addReaction(Emoji.fromUnicode("✂️")).queue();
 
-                    RPSListener.activeGames.put(message.getId(),
-                            new RPSListener.GameSession(event.getAuthor().getId(), opponent.getId()));
-                });
+            RPSListener.activeGames.put(
+                    message.getId(),
+                    new RPSListener.GameSession(event.getAuthor().getId(), opponent.getId())
+            );
+        });
     }
 }

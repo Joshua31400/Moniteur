@@ -1,9 +1,10 @@
 package fr.ynov.toulouse.discordbot.command.slash;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
+/** Version slash command de la commande ping. */
 public class PingSlashCommand implements ISlashCommand {
 
     @Override
@@ -13,7 +14,6 @@ public class PingSlashCommand implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        // Pour les Slash Commands, on doit impérativement utiliser reply() pour accuser réception
-        event.reply("Pong ! (Système natif)").queue();
+        event.reply("Pong !").queue();
     }
 }

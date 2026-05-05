@@ -4,8 +4,12 @@ import fr.ynov.toulouse.discordbot.command.CommandManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-// Ecoute les messages discorde
+/**
+ * Écoute les messages Discord et les transmet au {@link CommandManager}.
+ * Les messages provenant d'autres bots sont ignorés.
+ */
 public class CommandListener extends ListenerAdapter {
+
     private final CommandManager manager;
 
     public CommandListener(CommandManager manager) {
@@ -14,9 +18,7 @@ public class CommandListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        // Ignorer les messages des autres bots
         if (event.getAuthor().isBot()) return;
-
         manager.handle(event);
     }
 }
