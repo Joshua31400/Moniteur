@@ -9,6 +9,10 @@ import fr.ynov.toulouse.discordbot.command.RemindCommand;
 import fr.ynov.toulouse.discordbot.command.RPSCommand;
 import fr.ynov.toulouse.discordbot.listener.CommandListener;
 import fr.ynov.toulouse.discordbot.listener.RPSListener;
+
+import fr.ynov.toulouse.discordbot.command.slash.SlashCommandManager;
+import fr.ynov.toulouse.discordbot.command.slash.PingSlashCommand;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -33,14 +37,21 @@ public class Main {
             commandManager.registerCommand(new RemindCommand());
             commandManager.registerCommand(new RPSCommand());
 
+            SlashCommandManager slashManager = new SlashCommandManager();
+            slashManager.registerCommand(new PingSlashCommand());
+
             // Initialisation du bot en ajoutant notre Listener
             JDA jda = JDABuilder.createDefault(token)
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(new CommandListener(commandManager))
                     .addEventListeners(new RPSListener())
+
+                    .addEventListeners(slashManager)
+
                     .build();
 
             jda.awaitReady();
+            slashManager.pushCommandsToDiscord(jda);
             System.out.println("Le bot Ops est en ligne sur Discord !");
 
         } catch (InterruptedException e) {
