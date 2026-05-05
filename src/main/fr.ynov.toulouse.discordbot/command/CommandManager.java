@@ -6,6 +6,8 @@ import fr.ynov.toulouse.discordbot.BotConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 // Classe pour router tout les requêtes
 public class CommandManager {
@@ -21,11 +23,14 @@ public class CommandManager {
 
         if (!message.startsWith(BotConfig.PREFIX)) return;
 
+        // Loggeur de message
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println("[" + timestamp + "] " + event.getAuthor().getName() + " a exécuté : " + message);
+
         String[] split = message.replaceFirst(BotConfig.PREFIX, "").split("\\s+");
         String commandName = split[0].toLowerCase();
 
         String[] args = Arrays.copyOfRange(split, 1, split.length);
-
         ICommand command = commands.get(commandName);
 
         if (command != null) {
