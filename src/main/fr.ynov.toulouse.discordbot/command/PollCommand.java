@@ -8,7 +8,7 @@ import java.awt.Color;
 
 public class PollCommand implements ICommand {
 
-    private final String[] EMOJIS = {"U+1F1E6", "U+1F1E7", "U+1F1E8", "U+1F1E9", "U+1F1EA"};
+    private final String[] EMOJIS = {"🇦", "🇧", "🇨", "🇩", "🇪"};
 
     @Override
     public String getName() {
