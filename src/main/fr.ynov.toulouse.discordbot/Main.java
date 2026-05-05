@@ -6,7 +6,9 @@ import fr.ynov.toulouse.discordbot.command.HelpCommand;
 import fr.ynov.toulouse.discordbot.command.JokeCommand;
 import fr.ynov.toulouse.discordbot.command.PollCommand;
 import fr.ynov.toulouse.discordbot.command.RemindCommand;
+import fr.ynov.toulouse.discordbot.command.RPSCommand;
 import fr.ynov.toulouse.discordbot.listener.CommandListener;
+import fr.ynov.toulouse.discordbot.listener.RPSListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -29,11 +31,13 @@ public class Main {
             commandManager.registerCommand(new JokeCommand());
             commandManager.registerCommand(new PollCommand());
             commandManager.registerCommand(new RemindCommand());
+            commandManager.registerCommand(new RPSCommand());
 
             // Initialisation du bot en ajoutant notre Listener
             JDA jda = JDABuilder.createDefault(token)
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(new CommandListener(commandManager))
+                    .addEventListeners(new RPSListener())
                     .build();
 
             jda.awaitReady();
